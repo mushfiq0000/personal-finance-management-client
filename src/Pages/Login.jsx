@@ -2,7 +2,7 @@ import { FaEnvelope, FaLock } from "react-icons/fa";
 
 const Login = () => {
   return (
-    <div className="min-h-screen bg-base-200 flex items-center justify-center">
+    <div className="min-h-screen bg-base-200 flex items-center justify-center px-5">
       <div className="card w-full max-w-sm shadow-xl bg-base-100">
         <div className="card-body">
           {/* Logo and Title */}
