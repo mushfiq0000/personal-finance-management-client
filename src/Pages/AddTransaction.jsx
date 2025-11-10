@@ -1,10 +1,13 @@
 import React from "react";
-import { FaPlus } from "react-icons/fa";
+import { FaPlus, FaWallet } from "react-icons/fa";
 
 const AddTransaction = () => {
   return (
     <div className="px-5 bg-base-200 py-20">
       <div className="max-w-3xl mx-auto  p-8 bg-base-100 shadow-xl rounded-2xl ">
+        <p className="flex justify-center mb-2">
+          <FaWallet className="text-5xl text-yellow-500"/>
+        </p>
         <h2 className="text-2xl font-bold text-center">
           Add New Transaction
         </h2>
