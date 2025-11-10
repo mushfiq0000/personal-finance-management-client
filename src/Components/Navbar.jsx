@@ -2,7 +2,7 @@ import { AiOutlineTransaction } from "react-icons/ai";
 import { IoHomeOutline } from "react-icons/io5";
 import { MdOutlineAddCard } from "react-icons/md";
 import { TbReportSearch } from "react-icons/tb";
-import { Link, NavLink } from "react-router";
+import { Link, Links, NavLink } from "react-router";
 
 const Navbar = () => {
   const link = (
@@ -28,7 +28,7 @@ const Navbar = () => {
             isActive ? " border-[#3adc9e]" : " "
           }`
         }
-        to=""
+        to="/add-transaction"
       >
         {" "}
         <div className="flex items-center gap-1">
@@ -41,7 +41,7 @@ const Navbar = () => {
             isActive ? " border-[#3adc9e]" : ""
           }`
         }
-        to=""
+        to="/my-transactions"
       >
         <div className="flex items-center gap-1">
           <AiOutlineTransaction /> My Transactions
@@ -53,7 +53,7 @@ const Navbar = () => {
             isActive ? " border-[#3adc9e]" : ""
           }`
         }
-        to=""
+        to="/reports"
       >
         <div className="flex items-center gap-1">
           <TbReportSearch /> Reports
@@ -86,7 +86,7 @@ const Navbar = () => {
             </div>
             <ul
               tabIndex="-1"
-              className="menu menu-sm dropdown-content rounded-box z-1 mt-3 w-52 p-2 shadow"
+              className="menu menu-sm dropdown-content rounded-box z-10 bg-white mt-3 w-52 p-2 shadow"
             >
               {link}
             </ul>
@@ -105,12 +105,12 @@ const Navbar = () => {
           <ul className="menu menu-horizontal px-1">{link}</ul>
         </div>
         <div className="navbar-end gap-5">
-          <button className="btn bg-yellow-500 hover:bg-yellow-600 text-white border-none">
+          <Link to="/login" className="btn bg-yellow-500 hover:bg-yellow-600 text-white border-none">
             LogIn
-          </button>
-          <button className="btn bg-gray-800 hover:bg-gray-900 text-white ">
+          </Link>
+          <Link to='/signup' className="btn bg-gray-800 hover:bg-gray-900 text-white ">
             Sign Up
-          </button>
+          </Link>
         </div>
       </div>
     </div>

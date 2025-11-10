@@ -1,11 +1,12 @@
 import {
   FaChartLine,
+  FaCheckCircle,
   FaPiggyBank,
   FaShieldAlt,
-  FaCheckCircle,
 } from "react-icons/fa";
-import Banner from "../Banner";
 import { FaArrowRightLong, FaArrowTrendUp } from "react-icons/fa6";
+import Banner from "./Banner";
+
 
 const Home = () => {
   return (
