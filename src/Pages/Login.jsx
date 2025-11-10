@@ -1,9 +1,12 @@
 import { use } from "react";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { AuthContext } from "../Context/AuthContext";
+import { useLocation, useNavigate } from "react-router";
 
 const Login = () => {
   const { signIn } = use(AuthContext);
+  const location = useLocation()
+  const navigate= useNavigate()
 
   const handelLogin = (e) => {
     e.preventDefault();
@@ -14,6 +17,7 @@ const Login = () => {
     signIn(email, password).then((result) => {
       const user = result.user;
       console.log(user);
+      navigate(`${location.state ? location.state : "/"}`);
       
     }).catch((error) => {
       const errorCode = error.code;
