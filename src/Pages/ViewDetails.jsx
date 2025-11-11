@@ -1,12 +1,12 @@
-import React from "react";
-import { Link, useLoaderData } from "react-router";
+import { BsCalendarDate, BsFillFolderFill, BsTag } from "react-icons/bs";
 import { FaArrowLeft, FaDollarSign, FaPlus } from "react-icons/fa";
-import { BsTag, BsCalendarDate, BsFillFolderFill } from "react-icons/bs";
+import { Link, useLoaderData } from "react-router";
 
 const ViewDetails = () => {
   const details = useLoaderData()
   const data = details.result
-  console.log(data);
+  
+  
   
 
   return (
@@ -17,7 +17,7 @@ const ViewDetails = () => {
             to="/my-transactions"
             className="flex items-center text-[#2E8B57] hover:underline font-medium w-fit"
           >
-            <FaArrowLeft className="mr-2" /> Back to Transactions
+            <FaArrowLeft className="mr-2" /> Back to List
           </Link>
         </div>
         <div className="md:flex justify-between items-center border-b border-[#e0d7c8] pb-4 mb-6 ">
@@ -92,107 +92,17 @@ const ViewDetails = () => {
 
         {/* buttons */}
         <div className="flex flex-wrap gap-4 justify-center">
-          <button
-            onClick={() => document.getElementById("my_modal_1").showModal()}
-            className="btn bg-yellow-500 hover:bg-yellow-600 text-white px-6 rounded-md border-0"
-          >
-            Edit Transaction
-          </button>
-
-          {/* modal */}
-          <dialog id="my_modal_1" className="modal">
-            <div className="modal-box  backdrop-blur-md border-0 rounded-2xl">
-              <form method="dialog">
-                <button className="btn btn-sm btn-circle btn-ghost border-0 hover:text-red-800 absolute right-2 top-2">
-                  ✕
-                </button>
-              </form>
-
-              <h1 className="text-3xl font-bold text-center mb-2">
-                Update Transaction
-              </h1>
-              <p className="text-md text-center mb-5 ">
-                Edit your transaction details below
-              </p>
-
-              <form className="space-y-5">
-                {/* Type */}
-                <div>
-                  <label className="label">
-                    <span className="label-text font-semibold">Type</span>
-                  </label>
-                  <select className="select select-bordered w-full ">
-                    <option>Income</option>
-                    <option>Expense</option>
-                  </select>
-                </div>
-
-                {/* Category */}
-                <div>
-                  <label className="label">
-                    <span className="label-text font-semibold">Category</span>
-                  </label>
-                  <select className="select select-bordered w-full ">
-                    <option>Select category</option>
-                    <option>Salary</option>
-                    <option>Food</option>
-                    <option>Bills</option>
-                    <option>Healthcare</option>
-                    <option>Entertainment</option>
-                    <option>Shopping</option>
-                    <option>Other</option>
-                  </select>
-                </div>
-
-                {/* Amount */}
-                <div>
-                  <label className="label">
-                    <span className="label-text font-semibold">Amount</span>
-                  </label>
-                  <input
-                    type="number"
-                    placeholder="Enter amount"
-                    className="input input-bordered w-full "
-                  />
-                </div>
-
-                {/* Description */}
-                <div>
-                  <label className="label">
-                    <span className="label-text font-semibold">Description</span>
-                  </label>
-                  <textarea
-                    placeholder="Enter description"
-                    className="textarea textarea-bordered w-full "
-                  />
-                </div>
-
-                {/* Date */}
-                <div>
-                  <label className="label">
-                    <span className="label-text font-semibold">Date</span>
-                  </label>
-                  <input
-                    type="date"
-                    className="input input-bordered w-full "
-                  />
-                </div>
-
-                {/* Submit Button */}
-                <div className="text-center">
-                  <button className="btn bg-yellow-500 hover:bg-yellow-600 text-white border-none flex items-center gap-2 mx-auto">
-                    Save Changes <FaPlus />
-                  </button>
-                </div>
-              </form>
-            </div>
-          </dialog>
 
           <Link
-            to="/my-transactions"
-            className="btn bg-gray-600 hover:bg-gray-700 text-white  px-6 rounded-md"
+            to={`/update-transaction/${data._id}`}
+            className="btn bg-yellow-600 hover:bg-yellow-700 text-white  px-6 rounded-md"
           >
-            Back to List
+            <FaPlus/>  Add Transaction
+          </Link>
+          <Link to='/update-transaction'
+            className="btn bg-gray-500 hover:bg-gray-600 text-white px-6 rounded-md border-0"
+          >
+            Update Transaction
           </Link>
         </div>
       </div>

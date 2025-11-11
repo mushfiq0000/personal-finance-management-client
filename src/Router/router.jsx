@@ -9,6 +9,7 @@ import SignUp from "../Pages/SignUp";
 import PrivateRoute from "../Private/PrivateRoute";
 import MyProfile from "../Pages/MyProfile";
 import ViewDetails from "../Pages/ViewDetails";
+import UpdateTransaction from "../Pages/UpdateTransaction";
 
 
 
@@ -60,6 +61,13 @@ const router = createBrowserRouter([
             path: '/view-details/:id',
             element: ( <PrivateRoute>
                 <ViewDetails></ViewDetails>
+            </PrivateRoute> ),
+            loader: ({params}) => fetch(`http://localhost:3000/transaction/${params.id}`)
+        },
+        {
+            path: '/update-transaction/:id',
+            element: ( <PrivateRoute>
+                <UpdateTransaction></UpdateTransaction>
             </PrivateRoute> ),
             loader: ({params}) => fetch(`http://localhost:3000/transaction/${params.id}`)
         }

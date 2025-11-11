@@ -57,16 +57,13 @@ const renderCustomizedLabel = ({
 
 const Reports = () => {
   return (
-    <div className="bg-base-100 p-15">
-      <div className="flex justify-between items-center mb-6">
+    <div className="bg-base-100 p-5  ">
+      <div className="md:flex justify-between items-center pt-10 pb-20">
         <h1 className="text-2xl font-bold">Financial Reports</h1>
-        <button className="btn btn-outline flex items-center gap-2">
-          <FaCalendarAlt />
-          November 2025
-        </button>
+        <input type="month" className="btn" />
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 gap-6 mb-60">
         {/* Pie Chart */}
         <div className="card bg-base-200 p-6 shadow">
           <h2 className="text-lg font-semibold mb-4">Expenses by Category</h2>
