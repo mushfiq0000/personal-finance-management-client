@@ -1,25 +1,51 @@
-import React, { use } from "react";
+import { useState } from "react";
 import { FaCalendarAlt } from "react-icons/fa";
 import { useLoaderData, useNavigate } from "react-router";
-import { AuthContext } from "../Context/AuthContext";
 
 const UpdateTransaction = () => {
-    const navigate = useNavigate()
-    const {user} = use(AuthContext)
-    const details = useLoaderData()
-    const data = details.result
- 
-   
-    
+  const navigate = useNavigate();
+  const details = useLoaderData();
+  const data = details.result;
+  console.log(data);
+  
 
+  const [type, setType] = useState("Income");
 
+  const categories = {
+    Income: ["Salary", "Business", "Investments", "Other"],
+    Expense: ["Food", "Bills", "Entertainment", "Shopping", "Other"],
+  };
 
+  const handelSubmit = (e) => {
+    e.preventDefault();
+    const form = {
+      description: e.target.description.value,
+      category: e.target.category.value,
+      amount: e.target.amount.value,
+      type: e.target.type.value,
+      date: new Date(),
+    };
 
+    fetch(`http://localhost:3000/transaction/${data._id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(form),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    navigate(0);
+  };
 
-    const handelBack=()=>{
-        navigate(-1)
-    }
-
+  const handelBack = () => {
+    navigate(-1);
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-base-200 p-4">
@@ -32,42 +58,57 @@ const UpdateTransaction = () => {
         </p>
 
         {/* form */}
-        <form className="space-y-5">
-
-
-        {/* name */}
+        <form onSubmit={handelSubmit} className="space-y-5">
+          {/* name */}
           <div>
             <label className="label font-medium">Name</label>
             <input
               type="text"
-              defaultValue={user.displayName}
+              defaultValue={data.name}
               placeholder="Name"
-              className="input input-bordered w-full"
+              className="input input-bordered w-full cursor-not-allowed"
+              disabled
             />
           </div>
 
-
-
-
-          {/* type */}
+          {/* Type */}
           <div>
-            <label className="label font-medium">Transaction Type</label>
-            <select className="select select-bordered w-full">
-              <option>Expense</option>
-              <option>Income</option>
+            <label className="label">
+              <span className="label-text font-semibold">Type</span>
+            </label>
+            <select
+              defaultValue={data.type}
+              className="select select-bordered w-full"
+              name="type"
+              onChange={(e) => setType(e.target.value)}
+              required
+            >
+              <option
+              value={"Income"}
+              >Income</option>
+              <option
+              value={"Expense"}
+              >Expense</option>
             </select>
           </div>
 
-          {/* category */}
+          {/* Category */}
           <div>
-            <label className="label font-medium">Category</label>
-            <select className="select select-bordered w-full">
-              <option>Select a category</option>
-              <option>Food</option>
-              <option>Transport</option>
-              <option>Shopping</option>
-              <option>Health</option>
-              <option>Other</option>
+            <label className="label">
+              <span className="label-text font-semibold">Category</span>
+            </label>
+            <select
+              defaultValue={data.category}
+              className="select select-bordered w-full"
+              name="category"
+              required
+            >
+              <option value="">Select category</option>
+              {categories[type].map((cat, index) => (
+                <option key={index} value={cat}>
+                  {cat}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -76,7 +117,8 @@ const UpdateTransaction = () => {
             <label className="label font-medium">Amount</label>
             <input
               type="number"
-              placeholder="0.00"
+              name="amount"
+              defaultValue={data.amount}
               className="input input-bordered w-full"
             />
           </div>
@@ -85,6 +127,8 @@ const UpdateTransaction = () => {
           <div>
             <label className="label font-medium">Description (Optional)</label>
             <textarea
+              defaultValue={data.description}
+              name="description"
               placeholder="Add any notes about this transaction..."
               className="textarea textarea-bordered w-full h-24 resize-none"
             ></textarea>
@@ -96,20 +140,31 @@ const UpdateTransaction = () => {
             <div className="relative">
               <input
                 type="date"
-                defaultValue="2025-11-08"
+                name="date"
+                defaultValue={
+                  data.date
+                    ? new Date(data.date).toISOString().split("T")[0]
+                    : ""
+                }
                 className="input input-bordered w-full pr-10"
               />
               <FaCalendarAlt className="absolute right-3 top-3.5 text-gray-400 text-lg pointer-events-none" />
             </div>
           </div>
 
-
           <div className="flex justify-end gap-3 pt-3">
-            <button onClick={handelBack} type="button" className="btn text-white  bg-gray-500 hover:bg-gray-600">
+            <button
+              onClick={handelBack}
+              type="button"
+              className="btn text-white  bg-gray-500 hover:bg-gray-600"
+            >
               Cancel
             </button>
-            <button type="button" className="btn text-white bg-yellow-500 hover:bg-yellow-600"> 
-                Update Transaction
+            <button
+              type="submit"
+              className="btn text-white bg-yellow-500 hover:bg-yellow-600"
+            >
+              Update Transaction
             </button>
           </div>
         </form>

@@ -7,7 +7,6 @@ const ViewDetails = () => {
   const data = details.result
   
   
-  
 
   return (
     <div className="min-h-screen  flex  justify-center items-center p-6">
@@ -60,7 +59,7 @@ const ViewDetails = () => {
             </div>
             <div>
               <p className="text-sm text-gray-500 font-medium">Date</p>
-              <p className="font-semibold text-gray-800">{data.date}</p>
+              <p className="font-semibold text-gray-800">{data.date ? new Date(data.date).toISOString().split('T')[0] : ""}</p>
             </div>
           </div>
 
@@ -94,12 +93,12 @@ const ViewDetails = () => {
         <div className="flex flex-wrap gap-4 justify-center">
 
           <Link
-            to={`/update-transaction/${data._id}`}
+            to='/add-transaction'
             className="btn bg-yellow-600 hover:bg-yellow-700 text-white  px-6 rounded-md"
           >
             <FaPlus/>  Add Transaction
           </Link>
-          <Link to='/update-transaction'
+          <Link to={`/update-transaction/${data._id}`}
             className="btn bg-gray-500 hover:bg-gray-600 text-white px-6 rounded-md border-0"
           >
             Update Transaction

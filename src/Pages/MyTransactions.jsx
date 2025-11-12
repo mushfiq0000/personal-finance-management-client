@@ -5,19 +5,59 @@ import {
   FaEye,
   FaPlus,
 } from "react-icons/fa";
+import { MdOutlineDeleteForever } from "react-icons/md";
 import { Link, useLoaderData } from "react-router";
+import Swal from "sweetalert2";
 
 
 const MyTransactions = () => {
   const data = useLoaderData();
 
-
  
+const handleDelete = (id) =>{
+  
+    Swal.fire({
+  title: "Are you sure?",
+  text: "You won't be able to revert this!",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Yes, delete it!"
+}).then((result) => {
+  if (result.isConfirmed) {
+ 
+    fetch(`http://localhost:3000/transaction/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+    .then(res => res.json())
+    .then(data=> {
+      console.log(data);
+      Swal.fire({
+      title: "Deleted!",
+      text: "Your file has been deleted.",
+      icon: "success"
+    });
+      
+    })
+    .catch(err => {
+      console.log(err);
+      
+    })
 
+
+
+    
+  }
+});
+  }
   
 
   return (
-    <div className="bg-base-200 p-5">
+    <div className="bg-base-200 p-5 h-screen">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3">
         <h1 className="text-2xl font-bold">My Transactions</h1>
 
@@ -41,7 +81,8 @@ const MyTransactions = () => {
         </div>
       </div>
 
-      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {
+        data.length > 0 ? (<div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3  ">
         {data.map((transaction) => (
           <div
             key={transaction._id}
@@ -59,7 +100,7 @@ const MyTransactions = () => {
                 </div>
 
                 <span
-                  className={`font-bold ${
+                  className={`text-3xl font-bold ${
                     transaction.type?.toLowerCase() === "income"
                       ? "text-green-600"
                       : "text-red-600"
@@ -74,7 +115,7 @@ const MyTransactions = () => {
               </p>
               <p className="text-sm text-gray-800">
                 <span className="font-semibold">Date:</span>{" "}
-                {transaction.date}
+                {transaction.date ? new Date(transaction.date).toISOString().split('T')[0] : ""}
               </p>
               <p className="text-sm text-gray-800 line-clamp-2">
                 {transaction.description}
@@ -94,11 +135,21 @@ const MyTransactions = () => {
                   >
                     <FaEdit className="mr-2" /> Update
                   </Link>
+
+                  <button
+                  onClick={()=> handleDelete(transaction._id)} 
+                  className="btn text-red-600 bg-red-200 border-none "><MdOutlineDeleteForever /></button>
               </div>
             </div>
           </div>
         ))}
-      </div>
+      </div>) : (<div className="flex flex-col justify-center items-center mt-50 space-y-3">
+
+        <h4 className="text-2xl text-gray-500">No transactions yet</h4>
+        <Link to='/add-transaction' className="btn text-white bg-yellow-500 hover:bg-yellow-600"> Add Transaction <FaPlus /> </Link>
+
+      </div>)
+      }
     </div>
   );
 };
