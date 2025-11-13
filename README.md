@@ -4,7 +4,7 @@
 
 ## 📋 Overview  
 This is a full‑stack application for **Personal Finance Management**, comprising:  
-- A **client‑side** application built with React, Vite, Tailwind CSS & DaisyUI.  
+- A **client‑side** application built with React, Tailwind CSS & DaisyUI.  
 - A **server‑side** application built (Node.js / Express) acting as the API backend.  
 
 Together they allow users to register/login, add/edit/delete income & expense transactions, categorize them, view dashboards, and toggle light/dark mode.
