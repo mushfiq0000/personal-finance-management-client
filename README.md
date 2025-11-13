@@ -1,16 +1,45 @@
-# React + Vite
+# Personal Finance Management
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[Live Demo (Client)](https://personal-finance-managem-17082.web.app/login)
 
-Currently, two official plugins are available:
+## 📋 Overview  
+This is a full‑stack application for **Personal Finance Management**, comprising:  
+- A **client‑side** application built with React, Vite, Tailwind CSS & DaisyUI.  
+- A **server‑side** application built (Node.js / Express) acting as the API backend.  
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Together they allow users to register/login, add/edit/delete income & expense transactions, categorize them, view dashboards, and toggle light/dark mode.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## 🎯 Features  
+- User authentication (login / signup)  
+- Add, edit and delete transactions (income / expense)  
+- Categorize transactions (e.g., salary, food, entertainment)  
+- Filter/search transactions  
+- Dashboard showing key financial stats & charts  
+- Light mode & Dark mode toggle in frontend  
+- Responsive design (mobile, tablet, desktop)  
+- REST API backend supporting CRUD operations for transactions, categories & users  
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## 🧰 Tech Stack  
+
+### Frontend  
+- React + Vite  
+- Routing using React Router 
+- Tailwind CSS + DaisyUI  
+- Light & Dark mode support  
+
+### Backend  
+- Node.js + Express  
+- Database (mention if you’re using MongoDB / PostgreSQL / MySQL etc)  
+- JWT or session authentication (specify if applicable)  
+- RESTful API endpoints for users, transactions, categories  
+- Deployed backend live (if applicable)  
+
+### Deployment  
+- Frontend hosted at: https://personal-finance-managem-17082.web.app/login  
+- Backend hosted at: https://personal-finance-management-89l06ojs9.vercel.app
+
+---
