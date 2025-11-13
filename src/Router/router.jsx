@@ -1,16 +1,16 @@
 import { createBrowserRouter } from "react-router";
 import HomeLayout from "../Layout/HomeLayout";
-import Home from "../Pages/Home";
 import AddTransaction from "../Pages/AddTransaction";
+import Error from "../Pages/Error";
+import Home from "../Pages/Home";
+import Login from "../Pages/Login";
+import MyProfile from "../Pages/MyProfile";
 import MyTransactions from "../Pages/MyTransactions";
 import Reports from "../Pages/Reports";
-import Login from "../Pages/Login";
 import SignUp from "../Pages/SignUp";
-import PrivateRoute from "../Private/PrivateRoute";
-import MyProfile from "../Pages/MyProfile";
-import ViewDetails from "../Pages/ViewDetails";
 import UpdateTransaction from "../Pages/UpdateTransaction";
-import Error from "../Pages/Error";
+import ViewDetails from "../Pages/ViewDetails";
+import PrivateRoute from "../Private/PrivateRoute";
 
 const router = createBrowserRouter([
   {
@@ -77,8 +77,6 @@ const router = createBrowserRouter([
             <UpdateTransaction></UpdateTransaction>
           </PrivateRoute>
         ),
-        loader: ({ params }) =>
-          fetch(`http://localhost:3000/transaction/${params.id}`),
       },
       {
         path: "/*",

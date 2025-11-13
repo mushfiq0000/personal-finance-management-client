@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { use } from "react";
+import { use, useEffect, useState } from "react";
 import {
   FaChartLine,
   FaCheckCircle,
@@ -10,11 +10,39 @@ import { FaArrowRightLong, FaArrowTrendUp } from "react-icons/fa6";
 import { Link } from "react-router";
 import { AuthContext } from "../Context/AuthContext";
 import Banner from "./Banner";
+import Loading from "./Loading";
 
 const Home = () => {
-  const { user, } = use(AuthContext);
+  const { user, loading } = use(AuthContext);
 
-  // Framer Motion variants for smoother animations
+  const [summary, setSummary] = useState({
+    totalBalance: 0,
+    totalIncome: 0,
+    totalExpense: 0,
+  });
+
+  useEffect(() => {
+    if (user?.email) {
+      fetch(`http://localhost:3000/my-transaction-summary?email=${user.email}`, {
+        headers: {
+          authorization: `Bearer ${user.accessToken}`,
+        },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.success) {
+            setSummary({
+              totalBalance: data.totalBalance,
+              totalIncome: data.totalIncome,
+              totalExpense: data.totalExpense,
+            });
+          }
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [user]);
+
+  
   const fadeUp = {
     hidden: { opacity: 0, y: 50 },
     show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
@@ -28,6 +56,10 @@ const Home = () => {
     },
   };
 
+  if (loading) {
+    return <Loading/>
+  }
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -35,7 +67,6 @@ const Home = () => {
       transition={{ duration: 0.7 }}
       className="min-h-screen bg-base-100 text-base-content"
     >
-      
       <Banner />
 
       {/* User Summary Cards */}
@@ -60,7 +91,9 @@ const Home = () => {
               <h3 className="text-base font-semibold mb-1 text-gray-600">
                 Total Balance
               </h3>
-              <p className="text-3xl font-bold text-neutral-900">$0.00</p>
+              <p className="text-3xl font-bold text-neutral-900">
+                ${summary.totalBalance.toFixed(2)}
+              </p>
               <p className="text-gray-500 text-sm mt-2">Your current balance</p>
             </motion.div>
 
@@ -74,7 +107,9 @@ const Home = () => {
               <h3 className="text-base font-semibold mb-1 text-gray-600">
                 Total Income
               </h3>
-              <p className="text-3xl font-bold text-green-600">$0.00</p>
+              <p className="text-3xl font-bold text-green-600">
+                ${summary.totalIncome.toFixed(2)}
+              </p>
               <p className="text-gray-500 text-sm mt-2">All time income</p>
             </motion.div>
 
@@ -88,7 +123,9 @@ const Home = () => {
               <h3 className="text-base font-semibold mb-1 text-gray-600">
                 Total Expenses
               </h3>
-              <p className="text-3xl font-bold text-red-500">$0.00</p>
+              <p className="text-3xl font-bold text-red-500">
+                ${summary.totalExpense.toFixed(2)}
+              </p>
               <p className="text-gray-500 text-sm mt-2">All time expenses</p>
             </motion.div>
           </motion.div>

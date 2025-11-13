@@ -1,14 +1,51 @@
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../Context/AuthContext";
+import { AnimatePresence, motion } from "framer-motion";
 import { FaArrowDown, FaArrowUp, FaEdit, FaEye, FaPlus } from "react-icons/fa";
 import { MdOutlineDeleteForever } from "react-icons/md";
-import { Link, useLoaderData } from "react-router";
+import { Link } from "react-router";
 import Swal from "sweetalert2";
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
-const MyTransactions = () => {
-  const loadedData = useLoaderData();
-  const [data, setData] = useState(loadedData);
+const TransactionsPage = () => {
+  const { user } = useContext(AuthContext);
+  const [transactions, setTransactions] = useState([]);
   const [sortOrder, setSortOrder] = useState("Descending");
+
+
+
+
+  useEffect(() => {
+    if (user?.email) {
+      fetch(`http://localhost:3000/my-transaction?email=${user.email}`, {
+        headers: {
+          authorization: `Bearer ${user.accessToken}`
+        }
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setTransactions(data);
+        })
+        .catch((err) => console.error(err));
+    }
+  }, [user]);
+
+
+
+
+  const handleSort = (e) => {
+    const order = e.target.value;
+    setSortOrder(order);
+
+    const sorted = [...transactions].sort((a, b) =>
+      order === "Ascending"
+        ? a.amount - b.amount
+        : b.amount - a.amount
+    );
+    setTransactions(sorted);
+  };
+
+
+
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -28,8 +65,8 @@ const MyTransactions = () => {
           .then((res) => res.json())
           .then((response) => {
             if (response.deletedCount > 0 || response.success) {
-              const remaining = data.filter((item) => item._id !== id);
-              setData(remaining);
+              const remaining = transactions.filter((item) => item._id !== id);
+              setTransactions(remaining);
 
               Swal.fire({
                 title: "Deleted!",
@@ -38,50 +75,22 @@ const MyTransactions = () => {
               });
             }
           })
-          .catch((err) => console.log(err));
+          .catch((err) => console.error(err));
       }
     });
   };
 
-  const handleSort = (e) => {
-    const order = e.target.value;
-    setSortOrder(order);
 
-    let sorted = [...data];
-    if (order === "Ascending") {
-      sorted.sort((a, b) => a.amount - b.amount);
-    } else {
-      sorted.sort((a, b) => b.amount - a.amount);
-    }
-    setData(sorted);
-  };
 
-  // Framer Motion Variants for Smooth Animations
   const containerVariant = {
     hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.1,
-      },
-    },
+    show: { opacity: 1, transition: { staggerChildren: 0.1 } },
   };
 
   const cardVariant = {
-    hidden: { opacity: 0, y: 50, scale: 0.95 },
-    show: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: { duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] },
-    },
-    exit: {
-      opacity: 0,
-      y: 30,
-      scale: 0.9,
-      transition: { duration: 0.3, ease: "easeInOut" },
-    },
+    hidden: { opacity: 0, y: 20 },
+    show: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 },
   };
 
   return (
@@ -91,14 +100,15 @@ const MyTransactions = () => {
       transition={{ duration: 0.6, ease: "easeInOut" }}
       className="bg-base-200 p-5 min-h-screen"
     >
-      {/* Header Section */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-3"
       >
-        <h1 className="text-2xl font-bold">My Transactions</h1>
+        <h1 className="text-2xl font-bold text-gray-800 dark:text-gray-100">
+          My Transactions
+        </h1>
 
         <div className="flex gap-3 items-center">
           <select
@@ -118,9 +128,7 @@ const MyTransactions = () => {
           </Link>
         </div>
       </motion.div>
-
-      {/* Transaction Cards */}
-      {data.length > 0 ? (
+      {transactions?.length > 0 ? (
         <motion.div
           variants={containerVariant}
           initial="hidden"
@@ -128,7 +136,7 @@ const MyTransactions = () => {
           className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3"
         >
           <AnimatePresence>
-            {data.map((transaction) => (
+            {transactions.map((transaction) => (
               <motion.div
                 key={transaction._id}
                 variants={cardVariant}
@@ -142,7 +150,7 @@ const MyTransactions = () => {
                   transition: { duration: 0.3 },
                 }}
                 whileTap={{ scale: 0.98 }}
-                className="card shadow-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-xl rounded-2xl transition-all duration-300"
+                className="card shadow-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 hover:shadow-xl rounded-2xl transition-all duration-300 mb-10"
               >
                 <div className="card-body">
                   <div className="flex items-center justify-between mb-3">
@@ -185,7 +193,6 @@ const MyTransactions = () => {
                     </p>
                   </div>
 
-                  {/* Buttons */}
                   <motion.div
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
@@ -206,6 +213,7 @@ const MyTransactions = () => {
                       <FaEdit className="mr-2" /> Update
                     </Link>
 
+                    {/* ✅ Delete Button */}
                     <motion.button
                       whileTap={{ scale: 0.9 }}
                       onClick={() => handleDelete(transaction._id)}
@@ -241,4 +249,4 @@ const MyTransactions = () => {
   );
 };
 
-export default MyTransactions;
+export default TransactionsPage;

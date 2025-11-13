@@ -21,7 +21,9 @@ const AddTransaction = () => {
       category: e.target.category.value,
       amount: parseFloat(e.target.amount.value),
       type: e.target.type.value,
-      date: e.target.date.value,
+       date: e.target.date.value
+      ? new Date(e.target.date.value)
+      : new Date(),
       email: user.email,
       name: user.displayName,
     };
@@ -30,7 +32,10 @@ const AddTransaction = () => {
 
     fetch("http://localhost:3000/transaction", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { 
+        "Content-Type": "application/json",
+        authorization : `Bearer ${user.accessToken}`
+      },
       body: JSON.stringify(form),
     })
       .then((res) => res.json())

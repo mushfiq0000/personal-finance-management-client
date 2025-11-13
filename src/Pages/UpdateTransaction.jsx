@@ -1,34 +1,55 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState, useContext } from "react";
 import toast from "react-hot-toast";
-import { useLoaderData, useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import { AuthContext } from "../Context/AuthContext";
+import Loading from "./Loading";
 
 const UpdateTransaction = () => {
   const navigate = useNavigate();
-  const details = useLoaderData();
-  const data = details.result;
-  const [type, setType] = useState(data?.type || "Income");
-  const [category, setCategory] = useState(data?.category || "");
+  const { loading, user } = useContext(AuthContext);
+  const { id } = useParams();
+
+  const [data, setData] = useState(null);
+  const [type, setType] = useState("Income");
+  const [category, setCategory] = useState("");
+
   const categories = {
     Income: ["Salary", "Business", "Investments", "Other"],
     Expense: ["Food", "Health", "Bills", "Entertainment", "Shopping", "Other"],
   };
 
-
-
+  // Fetch transaction data
   useEffect(() => {
-    if (data) {
-      setType(data.type);
-      setCategory(data.category);
-    }
-  }, [data]);
+    if (!id || !user) return;
 
-  const handelSubmit = (e) => {
+    fetch(`http://localhost:3000/transaction/${id}`, {
+      headers: {
+        authorization: `Bearer ${user.accessToken}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((resData) => {
+        if (resData.success && resData.result) {
+          setData(resData.result);
+          setType(resData.result.type || "Income");
+          setCategory(resData.result.category || "");
+        } else {
+          toast.error("Failed to load transaction data");
+        }
+      })
+      .catch(() => toast.error("Something went wrong!"));
+  }, [id, user]);
+
+  if (loading || !data) return <Loading />;
+
+  const handleSubmit = (e) => {
     e.preventDefault();
+
     const form = {
       description: e.target.description.value,
-      category: category,
-      amount: e.target.amount.value,
-      type: type,
+      category,
+      amount: Number(e.target.amount.value),
+      type,
       date: e.target.date.value ? new Date(e.target.date.value) : new Date(),
     };
 
@@ -36,21 +57,20 @@ const UpdateTransaction = () => {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
+        authorization: `Bearer ${user.accessToken}`,
       },
       body: JSON.stringify(form),
     })
       .then((res) => res.json())
-      .then(() => {
-        toast.success("Transaction data updated successfully!");
-        navigate(-1);
+      .then((resData) => {
+        if (resData.success) {
+          toast.success("Transaction updated successfully!");
+          navigate(-1);
+        } else {
+          toast.error("Failed to update transaction!");
+        }
       })
-      .catch(() => {
-        toast.error("Failed to update transaction!");
-      });
-  };
-
-  const handelBack = () => {
-    navigate(-1);
+      .catch(() => toast.error("Something went wrong!"));
   };
 
   return (
@@ -63,32 +83,28 @@ const UpdateTransaction = () => {
           Edit your transaction details
         </p>
 
-        {/* form */}
-        <form onSubmit={handelSubmit} className="space-y-5">
-          {/* name */}
+        <form onSubmit={handleSubmit} className="space-y-5">
+          {/* Name */}
           <div>
             <label className="label font-medium">Name</label>
             <input
               type="text"
-              defaultValue={data.name}
+              value={data.name || ""}
               placeholder="Name"
               className="input input-bordered w-full cursor-not-allowed"
               disabled
             />
           </div>
 
-          {/* type */}
+          {/* Type */}
           <div>
-            <label className="label">
-              <span className="label-text font-semibold">Type</span>
-            </label>
+            <label className="label font-semibold">Type</label>
             <select
               value={type}
               className="select select-bordered w-full"
-              name="type"
               onChange={(e) => {
                 setType(e.target.value);
-                setCategory(""); // type বদলালে category reset হবে
+                setCategory(""); // reset category when type changes
               }}
               required
             >
@@ -97,69 +113,64 @@ const UpdateTransaction = () => {
             </select>
           </div>
 
-          {/* category */}
+          {/* Category */}
           <div>
-            <label className="label">
-              <span className="label-text font-semibold">Category</span>
-            </label>
+            <label className="label font-semibold">Category</label>
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               className="select select-bordered w-full"
-              name="category"
               required
             >
               <option value="">Select category</option>
-              {categories[type]?.map((cat, index) => (
-                <option key={index} value={cat}>
+              {categories[type]?.map((cat) => (
+                <option key={cat} value={cat}>
                   {cat}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* amount */}
+          {/* Amount */}
           <div>
             <label className="label font-medium">Amount</label>
             <input
               type="number"
               name="amount"
-              defaultValue={data.amount}
+              defaultValue={data.amount || ""}
               className="input input-bordered w-full"
+              required
             />
           </div>
 
-          {/* description */}
+          {/* Description */}
           <div>
             <label className="label font-medium">Description (Optional)</label>
             <textarea
-              defaultValue={data.description}
+              defaultValue={data.description || ""}
               name="description"
-              placeholder="Add any notes about this transaction..."
+              placeholder="Add notes about this transaction..."
               className="textarea textarea-bordered w-full h-24 resize-none"
             ></textarea>
           </div>
 
-          {/* date */}
+          {/* Date */}
           <div>
             <label className="label font-medium">Date</label>
-            <div className="relative">
-              <input
-                type="date"
-                name="date"
-                defaultValue={
-                  data.date
-                    ? new Date(data.date).toISOString().split("T")[0]
-                    : ""
-                }
-                className="input input-bordered w-full pr-10"
-              />
-            </div>
+            <input
+              type="date"
+              name="date"
+              defaultValue={
+                data.date ? new Date(data.date).toISOString().split("T")[0] : ""
+              }
+              className="input input-bordered w-full"
+            />
           </div>
 
+          {/* Buttons */}
           <div className="flex justify-end gap-3 pt-3">
             <button
-              onClick={handelBack}
+              onClick={() => navigate(-1)}
               type="button"
               className="btn text-white bg-gray-500 hover:bg-gray-600"
             >
