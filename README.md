@@ -79,9 +79,21 @@ Personal Finance Management is a full-stack application that helps users track i
   }
 }
 
+```
+
+---
+
+## 🖥️ **How to Run Locally**
+
+### 1️⃣ Clone the Repository
+```sh
 git clone https://github.com/mushfiq-ehsan/personal-finance-management-client.git
+
 cd personal-finance-management-client
+
 npm install
+
 npm run dev
+
 http://localhost:5173/
 
