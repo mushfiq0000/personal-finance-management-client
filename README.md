@@ -6,9 +6,7 @@
 ---
 
 ## 📋 Overview
-Personal Finance Management is a full-stack application that helps users track income and expenses, manage categories, and visualize overall financial health.  
-Users can securely register/login, add transactions, view dashboards, and switch between light/dark themes.  
-The project includes both a **React frontend** and a **Node.js/Express backend**.
+Personal Finance Management is a full-stack application that helps users track income and expenses, manage categories, and visualize overall financial health. Users can securely register/login, add transactions, view dashboards, and switch between light/dark themes.The project includes both a **React frontend** and a **Node.js/Express backend**.
 
 ---
 
