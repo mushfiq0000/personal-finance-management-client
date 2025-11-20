@@ -34,17 +34,15 @@ Personal Finance Management is a full-stack application that helps users track i
 ## 🧰 Tech Stack
 
 ### 🖥 Frontend
-- React + Vite  
+- React 
 - React Router  
 - Tailwind CSS  
-- DaisyUI  
-- Axios  
+- DaisyUI    
 
 ### 🛠 Backend
 - Node.js  
 - Express.js  
-- Database: MongoDB (if you used another DB, update this)  
-- JWT Authentication  
+- Database: MongoDB (if you used another DB, update this)   
 - RESTful API Endpoints  
 
 ### ☁ Deployment
